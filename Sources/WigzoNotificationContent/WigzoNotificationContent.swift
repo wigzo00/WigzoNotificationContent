@@ -274,7 +274,7 @@ class WigzoNotificationContent: UIViewController, UNNotificationContentExtension
     
 }
    
-extension WigzoNotificationExtension: UICollectionViewDelegate, UICollectionViewDataSource , UICollectionViewDelegateFlowLayout {
+extension WigzoNotificationContent: UICollectionViewDelegate, UICollectionViewDataSource , UICollectionViewDelegateFlowLayout {
 //    override func viewWillAppear(_ animated: Bool) {
 //        super.viewWillAppear(animated)
 //        startAutomaticSliding()
