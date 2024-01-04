@@ -10,10 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Wigzo Notification Extension-->
+        <!--Wigzo Notification Content-->
         <scene sceneID="eFb-pq-Abr">
             <objects>
-                <viewController storyboardIdentifier="WigzoNotificationExtension" id="R22-Je-e5L" userLabel="Wigzo Notification Extension" customClass="WigzoNotificationExtension" customModule="WigzoNotificationExtension" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WigzoNotificationContent" id="R22-Je-e5L" userLabel="Wigzo Notification Content" customClass="WigzoNotificationContent" customModule="WigzoNotificationContent" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="5c7-Nh-De8"/>
                         <viewControllerLayoutGuide type="bottom" id="09O-An-Rda"/>

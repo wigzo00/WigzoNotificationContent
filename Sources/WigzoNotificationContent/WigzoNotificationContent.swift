@@ -10,7 +10,7 @@ enum NotificationType: String {
     case collectionView = "carousel"
 }
 
-class WigzoNotificationExtension: UIViewController, UNNotificationContentExtension {
+class WigzoNotificationContent: UIViewController, UNNotificationContentExtension {
     var imageUrls: [String] = []
     var timer: Timer?
         var currentPage: Int = 0

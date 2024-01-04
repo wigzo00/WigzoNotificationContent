@@ -1,5 +1,5 @@
 import XCTest
-@testable import WigzoNotificationExtension
+@testable import WigzoNotificationContent
 
 final class WigzoNotificationExtensionTests: XCTestCase {
     func testExample() throws {

@@ -4,20 +4,20 @@
 import PackageDescription
 
 let package = Package(
-    name: "WigzoNotificationExtension",
+    name: "WigzoNotificationContent",
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "WigzoNotificationExtension",
-            targets: ["WigzoNotificationExtension"]),
+            name: "WigzoNotificationContent",
+            targets: ["WigzoNotificationContent"]),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "WigzoNotificationExtension"),
+            name: "WigzoNotificationContent"),
         .testTarget(
-            name: "WigzoNotificationExtensionTests",
-            dependencies: ["WigzoNotificationExtension"]),
+            name: "WigzoNotificationContentTests",
+            dependencies: ["WigzoNotificationContent"]),
     ]
 )
