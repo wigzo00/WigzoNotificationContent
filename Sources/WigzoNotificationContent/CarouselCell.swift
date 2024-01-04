@@ -11,7 +11,7 @@ import UIKit
 open class CarouselCell: UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!
 
-    override  func awakeFromNib() {
+    open override  func awakeFromNib() {
         super.awakeFromNib()
     }
 }
