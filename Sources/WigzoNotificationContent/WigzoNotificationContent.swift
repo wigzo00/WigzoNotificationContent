@@ -10,7 +10,7 @@ enum NotificationType: String {
     case collectionView = "carousel"
 }
 
-class WigzoNotificationContent: UIViewController, UNNotificationContentExtension {
+open class WigzoPushNotificationContentExtension: UIViewController, UNNotificationContentExtension, UICollectionViewDelegate, UICollectionViewDataSource , UICollectionViewDelegateFlowLayout {
     var imageUrls: [String] = []
     var timer: Timer?
         var currentPage: Int = 0
@@ -60,7 +60,7 @@ class WigzoNotificationContent: UIViewController, UNNotificationContentExtension
     
     @IBOutlet weak var view4Constraint: UIView!
     @IBOutlet weak var imageView2: UIImageView!
-    override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         collectionViewCaroussel.delegate = self
         collectionViewCaroussel.dataSource = self
@@ -79,7 +79,72 @@ class WigzoNotificationContent: UIViewController, UNNotificationContentExtension
         
     }
     
-    func didReceive(_ notification: UNNotification) {
+    open override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        stopAutomaticSliding()
+    }
+
+    func startAutomaticSliding() {
+        timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(automaticSlide), userInfo: nil, repeats: true)
+    }
+
+    func stopAutomaticSliding() {
+        timer?.invalidate()
+        timer = nil
+    }
+
+    @objc func automaticSlide() {
+        if currentPage < imageUrls.count - 1 {
+            currentPage += 1
+        } else {
+            currentPage = 0
+        }
+        collectionViewCaroussel.scrollToItem(at: IndexPath(row: currentPage, section: 0), at: .right, animated: true)
+        pageControl.currentPage = currentPage
+    }
+
+    
+    
+    
+    
+    
+    public func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.imageUrls.count
+    }
+
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CarouselCell", for: indexPath) as? CarouselCell else {
+            return UICollectionViewCell()
+        }
+
+        // Load image from URL and display in the cell
+        if let url = URL(string: imageUrls[indexPath.row]) {
+            DispatchQueue.global().async {
+                if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        cell.imageView.image = image
+                    }
+                }
+            }
+        }
+
+        return cell
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        //return CGSize(width: self.view.frame.size.width, height: 104.0)
+        let cellWidth = collectionView.frame.width // Set the cell width to the collection view width
+               // Set the desired cell height
+        let cellHeight = collectionView.frame.height
+
+               return CGSize(width: cellWidth, height: cellHeight)
+           
+    }
+    
+    public func didReceive(_ notification: UNNotification) {
         
         print("userinfo",notification.request.content.userInfo)
         print("categoryIdentifier",notification.request.content.categoryIdentifier)
@@ -177,7 +242,7 @@ class WigzoNotificationContent: UIViewController, UNNotificationContentExtension
     
         
     
-    func didReceive(_ response: UNNotificationResponse, completionHandler completion: @escaping (UNNotificationContentExtensionResponseOption) -> Void) {
+    public func didReceive(_ response: UNNotificationResponse, completionHandler completion: @escaping (UNNotificationContentExtensionResponseOption) -> Void) {
         print("userINFO",response.notification.request.content.userInfo)
         let dict = response.notification.request.content.userInfo
         if response.actionIdentifier == "Action1Identifier" {
@@ -270,79 +335,6 @@ class WigzoNotificationContent: UIViewController, UNNotificationContentExtension
                 self?.imageView2.image = image
             }
         }.resume()
-    }
-    
-}
-   
-extension WigzoNotificationContent: UICollectionViewDelegate, UICollectionViewDataSource , UICollectionViewDelegateFlowLayout {
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        startAutomaticSliding()
-//    }
-//
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        stopAutomaticSliding()
-    }
-
-    func startAutomaticSliding() {
-        timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(automaticSlide), userInfo: nil, repeats: true)
-    }
-
-    func stopAutomaticSliding() {
-        timer?.invalidate()
-        timer = nil
-    }
-
-    @objc func automaticSlide() {
-        if currentPage < imageUrls.count - 1 {
-            currentPage += 1
-        } else {
-            currentPage = 0
-        }
-        collectionViewCaroussel.scrollToItem(at: IndexPath(row: currentPage, section: 0), at: .right, animated: true)
-        pageControl.currentPage = currentPage
-    }
-
-    
-    
-    
-    
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.imageUrls.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CarouselCell", for: indexPath) as? CarouselCell else {
-            return UICollectionViewCell()
-        }
-
-        // Load image from URL and display in the cell
-        if let url = URL(string: imageUrls[indexPath.row]) {
-            DispatchQueue.global().async {
-                if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        cell.imageView.image = image
-                    }
-                }
-            }
-        }
-
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //return CGSize(width: self.view.frame.size.width, height: 104.0)
-        let cellWidth = collectionView.frame.width // Set the cell width to the collection view width
-               // Set the desired cell height
-        let cellHeight = collectionView.frame.height
-
-               return CGSize(width: cellWidth, height: cellHeight)
-           
     }
     
 }
