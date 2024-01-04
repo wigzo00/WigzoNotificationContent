@@ -8,7 +8,7 @@
 import UIKit
 
 
-class CarouselCell: UICollectionViewCell {
+open class CarouselCell: UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!
 
     override  func awakeFromNib() {
